@@ -22,8 +22,11 @@ This is a simple React web application that allows users to manage and display a
 2. Installing the webapp
 3. running webapp
    ```bash
-   git clone [https://github.com/<your-github-username>/healthcare-services-assignment.git](https://github.com/sanjay-ssb/jaruratcare_assignment.git)
+   git clone https://github.com/sanjay-ssb/jaruratcare_assignment.git
    cd healthcare-services-assignment
    npm install
    npm run dev
    ```
+## Deployed Link [https://66efc9d222edb758f0ad7b8c--legendary-klepon-b76ef7.netlify.app/]
+## Github Link   [https://github.com/sanjay-ssb/jaruratcare_assignment.git]
+   

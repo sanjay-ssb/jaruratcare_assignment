@@ -1,8 +1,31 @@
 import React, { useState } from "react";
 
-const AddServiceModal = ({ isAddServiceModalOpen,closeAddServiceModal,onAddService,service }) => {
+const AddServiceModal = ({
+  isAddServiceModalOpen,
+  closeAddServiceModal,
+  onAddService,
+  service,
+}) => {
   if (!isAddServiceModalOpen) return null;
   const [formData, setFormData] = useState(service);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    let formErrors = {};
+    Object.keys(formData).forEach((key) => {
+      if (!formData[key]) {
+        formErrors[key] = `${key.charAt(0).toUpperCase() + key.slice(1)} is required`;
+      }
+    });
+    // Additional specific validation
+    if (formData.price && formData.price <= 0) {
+      formErrors.price = "Price must be a positive number";
+    }
+    setErrors(formErrors);
+    return Object.keys(formErrors).length === 0;
+  };
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -13,11 +36,17 @@ const AddServiceModal = ({ isAddServiceModalOpen,closeAddServiceModal,onAddServi
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("in addservicemoal "+formData);
-    onAddService(formData); 
-    setFormData({ name: "", price: 0, description: "" }); 
+    e.preventDefault(); 
+    if (validateForm()) {
+      console.log("Form submitted successfully", formData)
+      console.log("in addservicemoal " + formData);
+    onAddService(formData);
+    setFormData({ name: "", price: 0, description: "" });
     closeAddServiceModal();
+    }
+    else{
+      console.log("Form validation failed");
+    }
   };
 
   return (
@@ -59,7 +88,7 @@ const AddServiceModal = ({ isAddServiceModalOpen,closeAddServiceModal,onAddServi
               <div className="col-span-2">
                 <label
                   htmlFor="name"
-                  className="block mb-2 text-sm font-medium text-blue-500 "
+                  className="block mb-2 text-sm font-medium text-blue-500"
                 >
                   Name
                 </label>
@@ -69,15 +98,18 @@ const AddServiceModal = ({ isAddServiceModalOpen,closeAddServiceModal,onAddServi
                   id="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-blue-500 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  className={`bg-gray-50 border ${
+                    errors.name ? "border-red-500" : "border-gray-300"
+                  } text-blue-500 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5`}
                   placeholder="Type services name"
                   required=""
                 />
+                {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
               </div>
               <div className="col-span-2 sm:col-span-1">
                 <label
                   htmlFor="price"
-                  className="block mb-2 text-sm font-medium text-blue-500 dark:text-blue-500"
+                  className="block mb-2 text-sm font-medium text-blue-500"
                 >
                   Price
                 </label>
@@ -87,16 +119,18 @@ const AddServiceModal = ({ isAddServiceModalOpen,closeAddServiceModal,onAddServi
                   id="price"
                   value={formData.price}
                   onChange={handleChange}
-                  className="bg-gray-50 border border-gray-300 text-blue-500 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  className={`bg-gray-50 border ${
+                    errors.price ? "border-red-500" : "border-gray-300"
+                  } text-blue-500 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5`}
                   placeholder="$2999"
                   required=""
                 />
+                {errors.price && <p className="text-red-500 text-sm">{errors.price}</p>}
               </div>
-              <div className="col-span-2 sm:col-span-1"></div>
               <div className="col-span-2">
                 <label
                   htmlFor="description"
-                  className="block mb-2 text-sm font-medium text-blue-500 dark:text-blue-500"
+                  className="block mb-2 text-sm font-medium text-blue-500"
                 >
                   Service Description
                 </label>
@@ -105,15 +139,18 @@ const AddServiceModal = ({ isAddServiceModalOpen,closeAddServiceModal,onAddServi
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
-                  className="block p-2.5 w-full text-sm text-blue-500 bg-gray-50 rounded-lg border border-gray-300"
+                  className={`block p-2.5 w-full text-sm text-blue-500 bg-gray-50 rounded-lg border ${
+                    errors.description ? "border-red-500" : "border-gray-300"
+                  }`}
                   placeholder="Write description here"
                 ></textarea>
+                {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
               </div>
             </div>
             <button
               type="button"
               onClick={handleSubmit}
-              className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
+              className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
               Add new service
             </button>

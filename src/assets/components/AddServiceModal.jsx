@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const AddServiceModal = ({ isAddServiceModalOpen, closeAddServiceModal,onAddProduct }) => {
+const AddServiceModal = ({ isAddServiceModalOpen,closeAddServiceModal,onAddService }) => {
   if (!isAddServiceModalOpen) return null;
   const [formData, setFormData] = useState({
     name: "",
@@ -18,7 +18,8 @@ const AddServiceModal = ({ isAddServiceModalOpen, closeAddServiceModal,onAddProd
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddProduct(formData); 
+    console.log("in addservicemoal "+formData);
+    onAddService(formData); 
     setFormData({ name: "", price: 0, description: "" }); 
     closeAddServiceModal();
   };

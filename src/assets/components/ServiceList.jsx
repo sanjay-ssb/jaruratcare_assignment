@@ -1,11 +1,21 @@
 import React, { useState } from "react";
 
 import AddServiceModal from "./AddServiceModal";
-import  DeleteServiceModal  from "./DeleteServiceModal";
-import  EditServiceModal  from "./EditServiceModal";
+import DeleteServiceModal from "./DeleteServiceModal";
+import EditServiceModal from "./EditServiceModal";
 
-const ServiceList = ({ services,onAddProduct }) => {
-  const [selectedService, setSelectedService] = useState(null);
+const ServiceList = ({
+  services,
+  onAddService,
+  onRemoveService,
+  onEditService,
+}) => {
+  const [selectedService, setSelectedService] = useState({
+    index: 0,
+    name: "",
+    description: "",
+    price: 0,
+  });
 
   // State and Hndlers for Modals start here
   const [isAddServiceModalOpen, setIsAddServiceModalOpen] = useState(false);
@@ -18,21 +28,41 @@ const ServiceList = ({ services,onAddProduct }) => {
     setIsAddServiceModalOpen(false);
   };
 
-  const [isDeleteServiceModalOpen, setIsDeleteServiceModalOpen] = useState(false);
-  const openDeleteServiceModal=(index)=>{
-    setSelectedService(index)
-    setIsDeleteServiceModalOpen(true)
-  }
+  const [isDeleteServiceModalOpen, setIsDeleteServiceModalOpen] =
+    useState(false);
+  const openDeleteServiceModal = (service,index) => {
+    console.log("index from services" + index);
+    setSelectedService({
+      index: index , // Default to 0 if index is undefined or null
+      name: service.name ,
+      description: service.description ,
+      price: service.price,
+    });
+    console.log(selectedService);
+    //setSelectedService(index)
+    setIsDeleteServiceModalOpen(true);
+  };
   const closeDeleteServiceModal = () => setIsDeleteServiceModalOpen(false);
 
   const [isEditServiceModalOpen, setIsEditServiceModalOpen] = useState(false);
-  const openEditServiceModal=(service)=>{
-    setSelectedService(service)
-    setIsEditServiceModalOpen(true)
-  }
-  const closeEditServiceModal = () => setIsEditServiceModalOpen(false);
+  const openEditServiceModal = (service, index) => {
+    console.log(service);
+    
+    setSelectedService((prevService) => ({
+      ...prevService, // Spread the previous state to keep other properties
+      index: index || 0, // Default to 0 if index is undefined or null
+      name: service.name || prevService.name, // Update name, or keep the previous one
+      description: service.description || prevService.description, // Update description, or keep previous
+      price: service.price || prevService.price, // Update price, or keep the previous one
+    }));
+
+    console.log(selectedService);
+    setIsEditServiceModalOpen(true);
+  };
+  const closeEditServiceModal = () =>{
+    setIsEditServiceModalOpen(false);
+  };
   // State and Hndlers for Modals start here
-  
 
   return (
     <div>
@@ -67,14 +97,14 @@ const ServiceList = ({ services,onAddProduct }) => {
                 <div>
                   <button
                     type="button"
-                    onClick={()=>openEditServiceModal(service)}
+                    onClick={() => openEditServiceModal(service, index)}
                     className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   >
                     Edit
                   </button>
                   <button
                     type="button"
-                    onClick={openDeleteServiceModal}
+                    onClick={() => openDeleteServiceModal(service,index)}
                     className="text-white bg-red-700 hover:bg-red-800 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                   >
                     Delete
@@ -96,20 +126,23 @@ const ServiceList = ({ services,onAddProduct }) => {
           <AddServiceModal
             isAddServiceModalOpen={isAddServiceModalOpen}
             closeAddServiceModal={closeAddServiceModal}
-            onAddProduct={onAddProduct}
+            onAddService={onAddService}
           />
         )}
         {isEditServiceModalOpen && (
           <EditServiceModal
-          isEditServiceModalOpen={isEditServiceModalOpen}
+            isEditServiceModalOpen={isEditServiceModalOpen}
             closeEditServiceModal={closeEditServiceModal}
             service={selectedService}
+            onEditService={onEditService}
           />
         )}
         {isDeleteServiceModalOpen && (
           <DeleteServiceModal
-          isDeleteServiceModalOpen={isDeleteServiceModalOpen}
-          closeDeleteServiceModal={closeDeleteServiceModal}
+            isDeleteServiceModalOpen={isDeleteServiceModalOpen}
+            closeDeleteServiceModal={closeDeleteServiceModal}
+            onDeleteService={onRemoveService}
+            index={selectedService.index}
           />
         )}
 

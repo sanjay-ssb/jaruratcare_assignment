@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const EditServiceModal = ({ isEditServiceModalOpen, closeEditServiceModal,service,index }) => {
+const EditServiceModal = ({ isEditServiceModalOpen, closeEditServiceModal,index,service }) => {
 
   if (!isEditServiceModalOpen) return null;
   const [formData,setFormData]=useState(service);

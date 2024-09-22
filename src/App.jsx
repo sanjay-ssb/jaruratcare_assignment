@@ -1,9 +1,6 @@
 import "./App.css";
 import React, { useState } from "react";
 import ServiceList from "./assets/components/ServiceList";
-import AddServiceModal from "./assets/components/AddServiceModal";
-import DeleteServiceModal from "./assets/components/DeleteServiceModal";
-import Modal from "./Modal.jsx";
 
 function App() {
   const initialData = [
@@ -26,40 +23,53 @@ function App() {
       price: 30.0,
     },
   ];
+  const dataWithIndex = initialData.map((service, index) => ({
+    ...service,
+    index: index, // Added index dynamically
+  }));
 
   const [services, setServices] = useState(() => {
-    const savedServices = localStorage.getItem('services'); // Use 'services' as the key in localStorage
+    const savedServices = localStorage.getItem('services');
     if (savedServices) {
-      return JSON.parse(savedServices); // Load from localStorage if available
+      return JSON.parse(savedServices);
     } else {
-      localStorage.setItem('services', JSON.stringify(initialData)); // Store initialData if no data in localStorage
-      return initialData; // Set initial data as default state
+      localStorage.setItem('services', JSON.stringify(dataWithIndex));
+      return initialData;
     }
   });
   
+  
 
-  const onAddProduct = (newService) => {
+  const onAddService = (newService) => {
     const updatedItems = [...services, newService];
+    console.log("Added service: ", newService);
     setServices(updatedItems);
-    localStorage.setItem('services', JSON.stringify(updatedItems)); // Save updated array to localStorage
+    localStorage.setItem('services', JSON.stringify(updatedItems));
   };
 
-  const onRemoveItem = (index) => {
+  const onRemoveService = (index) => {
     const updatedItems = services.filter((_, i) => i !== index);
+    console.log("Removed service at index: ", index);
     setServices(updatedItems);
-    localStorage.setItem('services', JSON.stringify(updatedItems)); // Save updated array to localStorage
+    localStorage.setItem('services', JSON.stringify(updatedItems));
   };
 
-  const editService = (index, newValue) => {
+  const onEditService = (index, newValue) => {
     const updatedServices = [...services];
-    updatedServices[index] = newValue; // Update service at specific index
-    setServices(updatedServices); // Update state
-    localStorage.setItem('services', JSON.stringify(updatedServices)); // Update localStorage
+    updatedServices[index] = newValue;
+    console.log("Edited service at index: ", index, newValue);
+    setServices(updatedServices);
+    localStorage.setItem('services', JSON.stringify(updatedServices));
   };
 
   return (
     <div className="min-h-screen w-full bg-gray-200">
-      <ServiceList services={services} />
+      <ServiceList 
+        services={services}
+        onAddService={onAddService}
+        onRemoveService={onRemoveService}
+        onEditService={onEditService}
+      />
     </div>
   );
 }

@@ -19,8 +19,15 @@ const ServiceList = ({
 
   // State and Hndlers for Modals start here
   const [isAddServiceModalOpen, setIsAddServiceModalOpen] = useState(false);
-  const openAddServiceModal = () => {
+  const openAddServiceModal = (length) => {
     console.log("AddServiceModal opened");
+    setSelectedService((prevService) => ({
+      ...prevService, // Spread the previous state to keep other properties
+      index: length , // Default to 0 if index is undefined or null
+      name: "" , // Update name, or keep the previous one
+      description: "" , // Update description, or keep previous
+      price: 0, // Update price, or keep the previous one
+    }));
     setIsAddServiceModalOpen(true);
   };
   const closeAddServiceModal = () => {
@@ -116,7 +123,7 @@ const ServiceList = ({
         })}
         <button
           type="button"
-          onClick={openAddServiceModal}
+          onClick={()=>openAddServiceModal(services.length)}
           className="w-2/3 text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           Add New Service
@@ -127,6 +134,7 @@ const ServiceList = ({
             isAddServiceModalOpen={isAddServiceModalOpen}
             closeAddServiceModal={closeAddServiceModal}
             onAddService={onAddService}
+            service={selectedService}
           />
         )}
         {isEditServiceModalOpen && (

@@ -1,12 +1,8 @@
 import React, { useState } from "react";
 
-const AddServiceModal = ({ isAddServiceModalOpen,closeAddServiceModal,onAddService }) => {
+const AddServiceModal = ({ isAddServiceModalOpen,closeAddServiceModal,onAddService,service }) => {
   if (!isAddServiceModalOpen) return null;
-  const [formData, setFormData] = useState({
-    name: "",
-    price: 0,
-    description: ""
-  });
+  const [formData, setFormData] = useState(service);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -115,7 +111,8 @@ const AddServiceModal = ({ isAddServiceModalOpen,closeAddServiceModal,onAddServi
               </div>
             </div>
             <button
-              type="submit"
+              type="button"
+              onClick={handleSubmit}
               className="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
             >
               Add new service

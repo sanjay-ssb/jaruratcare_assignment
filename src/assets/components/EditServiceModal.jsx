@@ -40,7 +40,7 @@ const EditServiceModal = ({ isEditServiceModalOpen, closeEditServiceModal,servic
   };
 
 return (
-  <div  className="fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+  <div  className="fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-black bg-opacity-50 backdrop-blur-sm">
   <div className="relative p-4 w-full max-w-md max-h-full">
       {/* <!-- Modal content --> */}
       <div className="relative bg-white rounded-lg shadow ">
